@@ -17,8 +17,8 @@ def main():
     global running, screen
 
     pointFilename = sys.argv[1]
-    SCREEN_WIDTH = 1000
-    SCREEN_HEIGHT = 1000
+    SCREEN_WIDTH = 1300
+    SCREEN_HEIGHT = 1300
     circle_radius = 3
     conversion_ratio = 100
     selectedPointIndex = None
@@ -81,7 +81,7 @@ def main():
     lastCircle = 0
     move_radius = 50
     min_radius = 10
-    move_speed = 1
+    move_speed = 2
     usedMultiplier = 1.2
     movementExponent = 1.6
     map_speed = conversion_ratio/mapPixeltoMeterRatio
@@ -141,7 +141,7 @@ def main():
                     if event.button == 1:            
                         selectedPointIndex = None
 
-                elif event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN:
+                elif event.type == pygame.MOUSEMOTION:
                     mouse_x, mouse_y = event.pos
                     if pygame.mouse.get_pressed()[0]:
 
