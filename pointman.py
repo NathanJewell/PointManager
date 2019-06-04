@@ -79,9 +79,9 @@ def main():
     mode = 1
     reverse = 0
     lastCircle = 0
-    move_radius = 30
+    move_radius = 50
     min_radius = 10
-    move_speed = 1
+    move_speed = 2
     usedMultiplier = 1.2
     movementExponent = 1.6
     map_speed = conversion_ratio/mapPixeltoMeterRatio
@@ -117,20 +117,21 @@ def main():
 
             if mode == 0:
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_x, mouse_y = event.pos
                     if event.button == 1:            
                         min_dist_circle = 1000000
                         for cdx in range(len(points)):
-                                d = np.clip(np.linalg.norm(np.asarray(event.pos)-points[cdx]), min_radius, move_radius)
-                                
-                                if d < min_dist_circle and d < (2* circle_radius):
-                                    min_dist_circle = d
-                                    selectedPointIndex = cdx
+                            d = np.linalg.norm(np.asarray(event.pos)-points[cdx])
+                            if d < min_dist_circle and d < (2* circle_radius):
+                                min_dist_circle = d
+                                selectedPointIndex = cdx
 
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if event.button == 1:            
                         selectedPointIndex = None
 
                 elif event.type == pygame.MOUSEMOTION:
+                    mouse_x, mouse_y = event.pos
                     if selectedPointIndex != None:
                         mouse_x, mouse_y = event.pos
                         points[selectedPointIndex][0] = mouse_x + offset_x
@@ -148,7 +149,7 @@ def main():
                         circleSlopes = []
                         min_dist_circle = move_radius
                         for cdx in range(len(points)):
-                            d = np.linalg.norm(np.asarray(event.pos)-points[cdx])
+                            d = np.clip(np.linalg.norm(np.asarray(event.pos)-points[cdx]), min_radius, move_radius)
                             if d < move_radius:
                                 usedCircles.append(cdx)
                                 circleSlopes.append(normSlope(event.pos, points[cdx], d))
@@ -157,7 +158,7 @@ def main():
                                 #usedCircles.remove(cdx)
                         #points[selectedPointIndex][0] = mouse_x + offset_x
                         #points[selectedPointIndex][1] = mouse_y + offset_y
-        if pygame.mouse.get_pressed()[0]:
+        if mode and pygame.mouse.get_pressed()[0]:
             for idx in range(len(usedCircles)):
                 points[usedCircles[idx]][0] += circleSlopes[idx][0] * move_speed * (-1 if reverse else 1)
                 points[usedCircles[idx]][1] += circleSlopes[idx][1] * move_speed * (-1 if reverse else 1)
